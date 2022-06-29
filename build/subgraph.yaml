@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: XP
@@ -26,7 +26,7 @@ dataSources:
         - UpdateScoreFailed
       abis:
         - name: XP
-          file: ./abis/XP.json
+          file: XP/abis/XP.json
       eventHandlers:
         - event: MetaTransactionExecuted(address,address,bytes)
           handler: handleMetaTransactionExecuted
@@ -36,7 +36,8 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: Paused(address)
           handler: handlePaused
-        - event: ProjectCreated(indexed bytes32,string,address,(string,uint256,uint8,bool)[],address[],address[])
+        - event: ProjectCreated(indexed
+            bytes32,string,address,(string,uint256,uint8,bool)[],address[],address[])
           handler: handleProjectCreated
         - event: ProjectUpdaterAdded(bytes32,address)
           handler: handleProjectUpdaterAdded
@@ -48,4 +49,4 @@ dataSources:
           handler: handleUpdateScore
         - event: UpdateScoreFailed(bytes32,bytes32,address)
           handler: handleUpdateScoreFailed
-      file: ./src/xp.ts
+      file: XP/XP.wasm
