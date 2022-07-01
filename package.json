@@ -1,0 +1,16 @@
+{
+  "name": "huddln-xp-protocol",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ bcaklovi/huddln-xp-protocol",
+    "create-local": "graph create --node http://localhost:8020/ bcaklovi/huddln-xp-protocol",
+    "remove-local": "graph remove --node http://localhost:8020/ bcaklovi/huddln-xp-protocol",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bcaklovi/huddln-xp-protocol"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.32.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}
