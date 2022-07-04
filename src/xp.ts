@@ -24,10 +24,10 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void { 
 export function handlePaused(event: Paused): void { }
 
 export function handleProjectCreated(event: ProjectCreated): void {
-  let currentProject = Project.load(event.params.projectId)
+  let currentProject = Project.load(event.params.projectId);
 
   if (!currentProject) {
-    currentProject = new Project(event.params.projectId)
+    currentProject = new Project(event.params.projectId);
   }
   currentProject.name = event.params.name;
   let ownersStrings: string[] = [];
@@ -136,13 +136,13 @@ export function handleUpdateScore(event: UpdateScore): void {
   currentScoreUpdate.save();
 
   // Update score types on project entity
-  let currentProject = Project.load(event.params.projectId)
+  // let currentProject = Project.load(event.params.projectId)
 
-  if (currentProject) {
-    currentProject.scoreTypes = event.params.scoreTypes;
+  // if (currentProject) {
+  //   currentProject.scoreTypes = event.params.scoreTypes;
 
-    currentProject.save();
-  }
+  //   currentProject.save();
+  // }
 
 }
 
@@ -175,7 +175,7 @@ export function handleNewScoreTypes(event: NewScoreTypes): void {
   }
 }
 
-export function handleRemoveScoreTypes(event: RemoveScoreType): void {
+export function handleRemoveScoreType(event: RemoveScoreType): void {
   let currentProject = Project.load(event.params.projectId);
 
   if (currentProject) {
