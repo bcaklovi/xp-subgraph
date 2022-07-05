@@ -1,0 +1,62 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: XP
+    network: matic
+    source:
+      address: "0xf1b5af2bd94ddfb696b54dabb06118a79c7460bc"
+      abi: XP
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - MetaTransactionExecuted
+        - NewActions
+        - NewScoreTypes
+        - OwnershipTransferred
+        - Paused
+        - ProjectCreated
+        - ProjectOwnerAdded
+        - ProjectOwnerRemoved
+        - ProjectUpdaterAdded
+        - ProjectUpdaterRemoved
+        - RemoveScoreType
+        - Unpaused
+        - UpdateScore
+        - UpdateScoreFailed
+      abis:
+        - name: XP
+          file: ./abis/XP.json
+      eventHandlers:
+        - event: MetaTransactionExecuted(address,address,bytes)
+          handler: handleMetaTransactionExecuted
+        - event: NewActions(bytes32,(string,uint256,uint8,bool)[])
+          handler: handleNewActions
+        - event: NewScoreTypes(bytes32,string[],string[])
+          handler: handleNewScoreTypes
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: ProjectCreated(indexed bytes32,string,address,(string,uint256,uint8,bool)[],string[],address[],address[])
+          handler: handleProjectCreated
+        - event: ProjectOwnerAdded(bytes32,address)
+          handler: handleProjectOwnerAdded
+        - event: ProjectOwnerRemoved(bytes32,address)
+          handler: handleProjectOwnerRemoved
+        - event: ProjectUpdaterAdded(bytes32,address)
+          handler: handleProjectUpdaterAdded
+        - event: ProjectUpdaterRemoved(bytes32,address)
+          handler: handleProjectUpdaterRemoved
+        - event: RemoveScoreType(bytes32,string,string[])
+          handler: handleRemoveScoreType
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: UpdateScore(bytes32,bytes32,address,uint256,uint256,uint8,string,string,string[])
+          handler: handleUpdateScore
+        - event: UpdateScoreFailed(bytes32,bytes32,address)
+          handler: handleUpdateScoreFailed
+      file: ./src/xp.ts
