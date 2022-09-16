@@ -447,4 +447,22 @@ export class Project extends Entity {
       this.set("scoreTypes", Value.fromStringArray(<Array<string>>value));
     }
   }
+
+  get projectTotalScore(): BigInt {
+    let value = this.get("projectTotalScore");
+    return value!.toBigInt();
+  }
+
+  set projectTotalScore(value: BigInt) {
+    this.set("projectTotalScore", Value.fromBigInt(value));
+  }
+
+  get totalUsers(): BigInt {
+    let value = this.get("totalUsers");
+    return value!.toBigInt();
+  }
+
+  set totalUsers(value: BigInt) {
+    this.set("totalUsers", Value.fromBigInt(value));
+  }
 }

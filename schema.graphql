@@ -44,4 +44,6 @@ type Project @entity {
   actions: [Action!]! @derivedFrom(field: "project")
   scoreboards: [Scoreboard!]! @derivedFrom(field: "project")
   scoreTypes: [String!]
+  projectTotalScore: BigInt!
+  totalUsers: BigInt!
 }
