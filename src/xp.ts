@@ -153,39 +153,38 @@ export function handleUpdateScore(event: UpdateScore): void {
   }
 
   if (currentProject) {
-    if (!currentProject.projectTotalScore) {
-      if (event.params.direction == 0) {
-        currentProject.projectTotalScore = event.params.pointChange;
-      } else {
-        currentProject.projectTotalScore = BigInt.fromI32(0);
-      }
+    // if (!currentProject.projectTotalScore) {
+    //   if (event.params.direction == 0) {
+    //     currentProject.projectTotalScore = event.params.pointChange;
+    //   } else {
+    //     currentProject.projectTotalScore = BigInt.fromI32(0);
+    //   }
+    // } else {
+    if (event.params.direction == 0) {
+      currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
+        event.params.pointChange
+      );
     } else {
-      if (event.params.direction == 0) {
-        currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
-          event.params.pointChange
-        );
-      } else {
-        if (currentScore) {
+      if (currentScore) {
+        if (
+          currentProject.projectTotalScore
+            .minus(event.params.pointChange)
+            .le(BigInt.fromI32(0))
+        ) {
+          currentProject.projectTotalScore = BigInt.fromI32(0);
+        } else {
           if (
-            currentProject.projectTotalScore
+            currentScore.points
               .minus(event.params.pointChange)
               .le(BigInt.fromI32(0))
           ) {
-            currentProject.projectTotalScore = BigInt.fromI32(0);
-          } else {
-            if (
+            currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
               currentScore.points
-                .minus(event.params.pointChange)
-                .le(BigInt.fromI32(0))
-            ) {
-              currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
-                currentScore.points
-              );
-            } else {
-              currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
-                event.params.pointChange
-              );
-            }
+            );
+          } else {
+            currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
+              event.params.pointChange
+            );
           }
         }
       }
