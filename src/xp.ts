@@ -86,6 +86,7 @@ export function handleProjectCreated(event: ProjectCreated): void {
   currentProject.creator = event.params.creator.toHexString();
   currentProject.projectTotalScore = BigInt.fromI32(0);
   currentProject.totalUsers = BigInt.fromI32(0);
+  currentProject.createdAt = event.block.timestamp;
 
   currentProject.save();
 }
@@ -152,46 +153,40 @@ export function handleUpdateScore(event: UpdateScore): void {
     }
   }
 
-  if (currentProject) {
-    // if (!currentProject.projectTotalScore) {
-    //   if (event.params.direction == 0) {
-    //     currentProject.projectTotalScore = event.params.pointChange;
-    //   } else {
-    //     currentProject.projectTotalScore = BigInt.fromI32(0);
-    //   }
-    // } else {
-    if (event.params.direction == 0) {
-      currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
-        event.params.pointChange
-      );
-    } else {
-      if (currentScore) {
-        if (
-          currentProject.projectTotalScore
-            .minus(event.params.pointChange)
-            .le(BigInt.fromI32(0))
-        ) {
-          currentProject.projectTotalScore = BigInt.fromI32(0);
-        } else {
-          if (
-            currentScore.points
-              .minus(event.params.pointChange)
-              .le(BigInt.fromI32(0))
-          ) {
-            currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
-              currentScore.points
-            );
-          } else {
-            currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
-              event.params.pointChange
-            );
-          }
-        }
-      }
-    }
+  // OLD TOTAL PROJECT SCORE LOGIC
+  // if (currentProject) {
+  //   if (event.params.direction == 0) {
+  //     currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
+  //       event.params.pointChange
+  //     );
+  //   } else {
+  //     if (currentScore) {
+  //       if (
+  //         currentProject.projectTotalScore
+  //           .minus(event.params.pointChange)
+  //           .le(BigInt.fromI32(0))
+  //       ) {
+  //         currentProject.projectTotalScore = BigInt.fromI32(0);
+  //       } else {
+  //         if (
+  //           currentScore.points
+  //             .minus(event.params.pointChange)
+  //             .le(BigInt.fromI32(0))
+  //         ) {
+  //           currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
+  //             currentScore.points
+  //           );
+  //         } else {
+  //           currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
+  //             event.params.pointChange
+  //           );
+  //         }
+  //       }
+  //     }
+  //   }
 
-    currentProject.save();
-  }
+  //   currentProject.save();
+  // }
 
   currentScoreboard.address = event.params.targetAddress.toHexString();
   currentScoreboard.project = event.params.projectId;
@@ -199,6 +194,8 @@ export function handleUpdateScore(event: UpdateScore): void {
   currentScoreboard.save();
 
   // Update Score
+
+  let scoreDifference: BigInt;
 
   if (!currentScore) {
     currentScore = new Score(
@@ -208,6 +205,36 @@ export function handleUpdateScore(event: UpdateScore): void {
         "_" +
         event.params.scoreType
     );
+
+    if (currentProject) {
+      if (event.params.direction == 0) {
+        scoreDifference = event.params.pointChange;
+        currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
+          scoreDifference
+        );
+      }
+
+      currentProject.save();
+    }
+  } else {
+    if (currentProject) {
+      let newUserScore = event.params.newPoints;
+      let oldUserScore = currentScore.points;
+
+      if (event.params.direction == 0) {
+        scoreDifference = event.params.pointChange;
+        currentProject.projectTotalScore = currentProject.projectTotalScore.plus(
+          scoreDifference
+        );
+      } else {
+        scoreDifference = oldUserScore.minus(newUserScore);
+        currentProject.projectTotalScore = currentProject.projectTotalScore.minus(
+          scoreDifference
+        );
+      }
+
+      currentProject.save();
+    }
   }
 
   currentScore.points = event.params.newPoints;

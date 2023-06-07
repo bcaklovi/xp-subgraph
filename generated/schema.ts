@@ -465,4 +465,13 @@ export class Project extends Entity {
   set totalUsers(value: BigInt) {
     this.set("totalUsers", Value.fromBigInt(value));
   }
+
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value!.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
 }

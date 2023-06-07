@@ -46,4 +46,5 @@ type Project @entity {
   scoreTypes: [String!]
   projectTotalScore: BigInt!
   totalUsers: BigInt!
+  createdAt: BigInt!
 }
